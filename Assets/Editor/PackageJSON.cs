@@ -1,7 +1,6 @@
 ﻿[System.Serializable]
 public class PackageJSON
 {
-    public string androidFileName;
     public string pcFileName;
     public Descriptor descriptor;
     public Config config;

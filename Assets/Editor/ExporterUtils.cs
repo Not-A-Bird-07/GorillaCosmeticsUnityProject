@@ -39,7 +39,6 @@ public static class ExporterUtils
     {
         string fileName = Path.GetFileName(path);
         string folderPath = Path.GetDirectoryName(path);
-        string androidFileName = Path.GetFileNameWithoutExtension(path) + "_android";
         string pcFileName = Path.GetFileNameWithoutExtension(path) + "_pc";
 
         Selection.activeObject = gameObject;
@@ -57,14 +56,9 @@ public static class ExporterUtils
 
         BuildPipeline.BuildAssetBundles(Application.temporaryCachePath, new AssetBundleBuild[] { assetBundleBuild }, 0, BuildTarget.StandaloneWindows64);
 
-        // Do it again for Android
-        assetBundleBuild.assetBundleName = androidFileName;
-        BuildPipeline.BuildAssetBundles(Application.temporaryCachePath, new AssetBundleBuild[] { assetBundleBuild }, 0, BuildTarget.Android);
-
         EditorPrefs.SetString("currentBuildingAssetBundlePath", folderPath);
 
         // JSON stuff
-        packageJSON.androidFileName = androidFileName;
         packageJSON.pcFileName = pcFileName;
         string json = JsonUtility.ToJson(packageJSON, true);
         File.WriteAllText(Application.temporaryCachePath + "/package.json", json);
@@ -75,7 +69,7 @@ public static class ExporterUtils
         {
             File.Delete(Application.temporaryCachePath + "/tempZip.zip");
         }
-        CreateZipFile(Application.temporaryCachePath + "/tempZip.zip", new List<string> { Application.temporaryCachePath + "/" + pcFileName, Application.temporaryCachePath + "/" + androidFileName, Application.temporaryCachePath + "/package.json" });
+        CreateZipFile(Application.temporaryCachePath + "/tempZip.zip", new List<string> { Application.temporaryCachePath + "/" + pcFileName, Application.temporaryCachePath + "/package.json" });
         if (File.Exists(path))
         {
             File.Delete(path);
